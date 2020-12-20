@@ -31,4 +31,6 @@ BPM: 120
 ```
 
 ## How to run
+```shell
 ./main.py FILENAME
+```
