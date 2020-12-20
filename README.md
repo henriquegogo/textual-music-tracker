@@ -3,7 +3,7 @@
 Create a music tracker using just your favorite text editor and play as a midi player.
 
 ## Example
-`
+```
 Title: An example
 Author: Henrique
 Octave: 3
@@ -28,7 +28,7 @@ BPM: 120
 |------|----|---|--|----------------
 |------|----|---|--|----------------
 0======0====0===0==0================
-`
+```
 
 ## How to run
 ./main.py FILENAME
