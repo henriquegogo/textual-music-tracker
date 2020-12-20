@@ -3,6 +3,10 @@
 Create a music tracker using just your favorite text editor and play as a midi player.
 
 ## Example
+
+Note velocity is a 0-9 number.
+Characters like "=", "-" and "|" are just for visualization and will be ignored.
+
 ```
 Title: An example
 Author: Henrique
