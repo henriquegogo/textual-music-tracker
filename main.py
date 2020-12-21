@@ -12,40 +12,54 @@ info = {}
 
 def send_message(message_type, note, velocity):
     midiout.send_message([message_type, note, velocity])
-    print(message_type, note, velocity)
 
 
-def process_track(track):
+def process_patterns(patterns):
     bpm = int(info.get('bpm') or 120)
-    octave = int(info.get('octave') or 4)
+    max_length = 0
 
-    for track_line in track:
-        for note, velocity in enumerate(track_line):
-            note = (octave + 1) * 12 + note
+    for pattern in patterns:
+        length = len(pattern.get('notes'))
+        if length > max_length: max_length = length
 
-            if velocity.isdigit():
-                message_type = NOTE_OFF if velocity == '0' else NOTE_ON
-                velocity = int(127 / 9 * float(velocity))
-                send_message(message_type, note, velocity)
+    for i in range(max_length):
+        for pattern in patterns:
+            octave = int(pattern.get('octave') or 4)
+
+            for note, velocity in enumerate(pattern.get('notes')[i]):
+                note = (octave + 1) * 12 + note
+
+                if velocity.isdigit():
+                    message_type = NOTE_OFF if velocity == '0' else NOTE_ON
+                    velocity = int(127 / 9 * float(velocity))
+                    send_message(message_type, note, velocity)
 
         time.sleep(60 / bpm / 4)
 
 
 def process_lines(lines):
     global info
-    track = []
+    patterns = []
+    pattern = None
 
     for line in lines:
-        key_value = line.split(':')
+        if ':' in line:
+            key, value = line.split(':')
+            dataset = pattern or info
+            dataset[key.lower()] = value.strip()
 
-        if len(key_value) > 1 and key_value[1]:
-            key, value = key_value
-            info[key.lower()] = value.strip()
+        elif line and line[0] == '#':
+            if pattern:
+                patterns.append(pattern)
+                pattern = None
 
-        elif '▏' not in line and '▁' not in line and '▔' not in line:
-            track.append(line)
+            if line == '# PATTERN':
+                pattern = {'notes': []}
 
-    process_track(track)
+        elif pattern and any(char in line for char in '=-|0123456789'):
+            pattern.get('notes').append(line)
+
+    process_patterns(patterns)
 
 
 def show_usage_message():
@@ -55,11 +69,11 @@ def show_usage_message():
 def open_file(filename):
     try:
         file = open(filename, 'r')
-        lines = file.read().split('\n')
 
     except:
         print('Error reading file')
 
+    lines = file.read().split('\n')
     process_lines(lines)
 
 
