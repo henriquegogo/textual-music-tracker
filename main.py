@@ -48,16 +48,15 @@ def process_lines(lines):
             dataset = pattern or info
             dataset[key.lower()] = value.strip()
 
-        elif line and line[0] == '#':
-            if pattern:
-                patterns.append(pattern)
-                pattern = None
-
-            if line == '# PATTERN':
-                pattern = {'notes': []}
+        elif line == '# PATTERN':
+            pattern = {'notes': []}
 
         elif pattern and any(char in line for char in '=-|0123456789'):
             pattern.get('notes').append(line)
+
+        elif pattern and len(line) == 0:
+            patterns.append(pattern)
+            pattern = None
 
     process_patterns(patterns)
 
