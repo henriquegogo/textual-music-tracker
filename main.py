@@ -17,7 +17,7 @@ def send_message(message_type, note, velocity):
 def rotate_pattern(pattern):
     notes = [list(line) for line in pattern.get('notes')]
     rotated = list(reversed(list(zip(*notes))))
-    notes = list(reversed([''.join(list(reversed(line))) for line in rotated]))
+    notes = list(reversed([''.join(list(reversed(line))) for line in rotated]))[4:]
     pattern['notes'] = notes
 
 def process_patterns(patterns):
