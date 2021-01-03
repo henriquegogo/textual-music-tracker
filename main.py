@@ -20,6 +20,7 @@ def rotate_pattern(pattern):
     notes = list(reversed([''.join(list(reversed(line))) for line in rotated]))[4:]
     pattern['notes'] = notes
 
+
 def process_patterns(patterns):
     bpm = int(info.get('bpm') or 120)
     max_length = 0
