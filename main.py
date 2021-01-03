@@ -14,11 +14,19 @@ def send_message(message_type, note, velocity):
     midiout.send_message([message_type, note, velocity])
 
 
+def rotate_pattern(pattern):
+    notes = [list(line) for line in pattern.get('notes')]
+    rotated = list(reversed(list(zip(*notes))))
+    notes = list(reversed([''.join(list(reversed(line))) for line in rotated]))
+    pattern['notes'] = notes
+
 def process_patterns(patterns):
     bpm = int(info.get('bpm') or 120)
     max_length = 0
 
     for pattern in patterns:
+        orientation = pattern.get('orientation')
+        if orientation == 'horizontal': rotate_pattern(pattern)
         length = len(pattern.get('notes'))
         if length > max_length: max_length = length
 

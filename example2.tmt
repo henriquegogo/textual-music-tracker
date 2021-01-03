@@ -4,6 +4,7 @@ BPM: 120
 
 # PATTERN
 Pattern: Keyboard
+Orientation: horizontal
 Octave: 4
  ▁▁
 ▕  ▎|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---0
